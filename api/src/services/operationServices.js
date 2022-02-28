@@ -1,4 +1,4 @@
-const { Operation } = require("../db");
+const { Operation, Type } = require("../db");
 const { v4: uuidv4 } = require("uuid");
 
 const insertOperation = async ({ concept, amount, typeId }) => {
@@ -15,7 +15,13 @@ const getOperationDetail = async (id) => {
   return await Operation.findByPk(id);
 };
 const getOperations = async () => {
-  return await Operation.findAll({ where: { disabled: false } });
+  return await Operation.findAll({
+    where: { disabled: false },
+    include: {
+      model: Type,
+      as: "type",
+    },
+  });
 };
 
 const updateOperation = async (id, data) => {
